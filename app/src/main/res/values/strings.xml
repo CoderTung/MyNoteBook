@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MyNoteBook</string>
     <string name="action_settings">设置</string>
+
+    <!--EditActivity-->
+    <string name="edit_edit_hint">输入内容</string>
+    <string name="edit_btn_text">提交</string>
 </resources>

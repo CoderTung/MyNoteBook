@@ -1,16 +1,16 @@
 package cn.studyjams.s2.sj20170121.mynotebook;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +29,15 @@ import java.util.List;
  *      包名统一使用 cn.studyjams.s2.sj小组编号.个人姓名或软件名字
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private ListView lv;
-    private ArrayAdapter mArrayAdapter;
-    private List<String> data;
+    private MyListViewAdapter mAdapter;
+    private Note mNote;
+    private List<Note> mNotes;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initActivity() {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,31 +46,70 @@ public class MainActivity extends AppCompatActivity {
 
         lv = (ListView) findViewById(R.id.main_list);
 
-        data = new ArrayList<>();
+        if (DataSupport.findAll(Note.class).isEmpty()){
+            mNote = new Note();
+            mNote.setContent("没有笔记");
+            mNote.setDate("ooops");
+            mNotes = new ArrayList<>();
+            mNotes.add(mNote);
+            mAdapter = new MyListViewAdapter(mContext , mNotes);
+        } else {
+            mNotes = new ArrayList<>();
+            mNotes = DataSupport.findAll(Note.class);
+            mAdapter = new MyListViewAdapter(mContext , mNotes);
+        }
 
-        data.add("123");
-        data.add("456");
-        data.add("789");
+        lv.setAdapter(mAdapter);
 
-        String[] data1 = {"123" , "1231231"};
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mContext , EditActivity.class);
+                intent.putExtra("content" , mNotes.get(position).getContent());
+                intent.putExtra("type" , "change");
+                startActivityForResult(intent , 1);
+            }
+        });
 
-        mArrayAdapter = new ArrayAdapter(this , android.R.layout.simple_list_item_1 , data);
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                DataSupport.deleteAll(Note.class , "content = ?" , mNotes.get(position).getContent());
+                mNotes.remove(position);
+                mAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
 
-        lv.setAdapter(mArrayAdapter);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "添加日记", Snackbar.LENGTH_LONG)
-                        .setAction("Action", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                data.add("112233");
-                                mArrayAdapter.notifyDataSetChanged();
-                            }
-                        }).show();
+                Intent intent = new Intent(mContext , EditActivity.class);
+                intent.putExtra("type" , "add");
+                startActivityForResult(intent , 2);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode){
+            case 1:
+                Toast.makeText(mContext, "修改", Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                Toast.makeText(mContext, "新增", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
