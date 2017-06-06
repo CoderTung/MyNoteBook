@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cn.studyjams.s2.sj20170121.mynotebook.EditActivity"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <EditText

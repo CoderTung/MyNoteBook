@@ -1,7 +1,9 @@
 package cn.studyjams.s2.sj20170121.mynotebook;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -35,14 +38,13 @@ public class MainActivity extends BaseActivity {
     private MyListViewAdapter mAdapter;
     private Note mNote;
     private List<Note> mNotes;
+    private Calendar mCalendar;
 
     @Override
     protected void initActivity() {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        toolbar.setTitle("我的笔记本");
 
         lv = (ListView) findViewById(R.id.main_list);
 
@@ -58,16 +60,17 @@ public class MainActivity extends BaseActivity {
             mNotes = DataSupport.findAll(Note.class);
             mAdapter = new MyListViewAdapter(mContext , mNotes);
         }
-
         lv.setAdapter(mAdapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(mContext , EditActivity.class);
+                intent.setType("change");
                 intent.putExtra("content" , mNotes.get(position).getContent());
-                intent.putExtra("type" , "change");
+                intent.putExtra("date" , mNotes.get(position).getDate());
                 startActivityForResult(intent , 1);
+                overridePendingTransition(R.anim.move_in_right, R.anim.move_out_left);
             }
         });
 
@@ -86,24 +89,41 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext , EditActivity.class);
-                intent.putExtra("type" , "add");
+                intent.setType("add");
                 startActivityForResult(intent , 2);
+                overridePendingTransition(R.anim.move_in_right, R.anim.move_out_left);
             }
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode){
+        switch (requestCode){
             case 1:
                 Toast.makeText(mContext, "修改", Toast.LENGTH_SHORT).show();
+                /*ContentValues values = new ContentValues();
+                values.put("content" , data.getStringExtra("content"));
+                values.put("date" , data.getStringExtra("date"));
+                DataSupport.updateAll(Note.class , values , "date = ?" , data.getStringExtra("olddate"));*/
                 break;
             case 2:
                 Toast.makeText(mContext, "新增", Toast.LENGTH_SHORT).show();
+                /*mNote = new Note();
+                mNote.setContent(data.getStringExtra("content"));
+                mNote.setDate(data.getStringExtra("date"));
+                if (mNote.save()){
+                    Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "保存失败", Toast.LENGTH_SHORT).show();
+                }*/
                 break;
             default:
                 break;
         }
+        mNotes.clear();
+        mNotes = DataSupport.findAll(Note.class);
+        mAdapter = new MyListViewAdapter(mContext , mNotes);
+        lv.setAdapter(mAdapter);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -128,9 +148,23 @@ public class MainActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "跳转到设置界面", Toast.LENGTH_SHORT).show();
+            showDialogTip();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showDialogTip() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("MyNoteBook")
+                .setIcon(R.mipmap.logo)
+                .setMessage("By Tung" + "\n"  + "如果你有任何建议或疑问，请联系我" + "\n" + "wutong0213@sina.cn")
+                .setPositiveButton("已了解", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //确定操作
+                    }
+                })
+                .show();
     }
 }
