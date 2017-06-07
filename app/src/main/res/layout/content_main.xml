@@ -7,11 +7,22 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="cn.studyjams.s2.sj20170121.mynotebook.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/main_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/main_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="没有保存笔记\n点击右下角按钮新增笔记"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="20sp"/>
 
 </LinearLayout>

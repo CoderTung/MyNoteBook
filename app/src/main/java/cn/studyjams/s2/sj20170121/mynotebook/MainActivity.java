@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.litepal.crud.DataSupport;
 
@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity {
     private Note mNote;
     private List<Note> mNotes;
     private Calendar mCalendar;
+    private TextView tv;
 
     @Override
     protected void initActivity() {
@@ -46,16 +47,15 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        tv = (TextView) findViewById(R.id.main_tv);
         lv = (ListView) findViewById(R.id.main_list);
 
         if (DataSupport.findAll(Note.class).isEmpty()){
-            mNote = new Note();
-            mNote.setContent("没有笔记");
-            mNote.setDate("ooops");
-            mNotes = new ArrayList<>();
-            mNotes.add(mNote);
-            mAdapter = new MyListViewAdapter(mContext , mNotes);
+            lv.setVisibility(View.GONE);
+            tv.setVisibility(View.VISIBLE);
         } else {
+            lv.setVisibility(View.VISIBLE);
+            tv.setVisibility(View.GONE);
             mNotes = new ArrayList<>();
             mNotes = DataSupport.findAll(Note.class);
             mAdapter = new MyListViewAdapter(mContext , mNotes);
@@ -80,6 +80,13 @@ public class MainActivity extends BaseActivity {
                 DataSupport.deleteAll(Note.class , "content = ?" , mNotes.get(position).getContent());
                 mNotes.remove(position);
                 mAdapter.notifyDataSetChanged();
+                if (mNotes.isEmpty()){
+                    lv.setVisibility(View.GONE);
+                    tv.setVisibility(View.VISIBLE);
+                }else {
+                    lv.setVisibility(View.VISIBLE);
+                    tv.setVisibility(View.GONE);
+                }
                 return true;
             }
         });
@@ -98,32 +105,17 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case 1:
-                Toast.makeText(mContext, "修改", Toast.LENGTH_SHORT).show();
-                /*ContentValues values = new ContentValues();
-                values.put("content" , data.getStringExtra("content"));
-                values.put("date" , data.getStringExtra("date"));
-                DataSupport.updateAll(Note.class , values , "date = ?" , data.getStringExtra("olddate"));*/
-                break;
-            case 2:
-                Toast.makeText(mContext, "新增", Toast.LENGTH_SHORT).show();
-                /*mNote = new Note();
-                mNote.setContent(data.getStringExtra("content"));
-                mNote.setDate(data.getStringExtra("date"));
-                if (mNote.save()){
-                    Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(mContext, "保存失败", Toast.LENGTH_SHORT).show();
-                }*/
-                break;
-            default:
-                break;
-        }
-        mNotes.clear();
+        mNotes = new ArrayList<>();
         mNotes = DataSupport.findAll(Note.class);
         mAdapter = new MyListViewAdapter(mContext , mNotes);
         lv.setAdapter(mAdapter);
+        if (mNotes.isEmpty()){
+            lv.setVisibility(View.GONE);
+            tv.setVisibility(View.VISIBLE);
+        }else {
+            lv.setVisibility(View.VISIBLE);
+            tv.setVisibility(View.GONE);
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
