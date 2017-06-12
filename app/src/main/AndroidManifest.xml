@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="cn.studyjams.s2.sj20170121.mynotebook">
+          package="cn.studyjams.s2.sj0121.mynotebook">
 
     <application
-        android:name=".MyApp"
+        android:name="cn.studyjams.s2.sj0121.mynotebook.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_my"
         android:label="@string/app_name"
@@ -11,13 +11,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="cn.studyjams.s2.sj0121.mynotebook.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".EditActivity">
+        <activity android:name="cn.studyjams.s2.sj0121.mynotebook.EditActivity">
         </activity>
-        <activity android:name=".SplashActivity"
+        <activity android:name="cn.studyjams.s2.sj0121.mynotebook.SplashActivity"
                   android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

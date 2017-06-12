@@ -5,6 +5,6 @@
     <version value="1" ></version>
 
     <list>
-        <mapping class="cn.studyjams.s2.sj20170121.mynotebook.Note"></mapping>
+        <mapping class="cn.studyjams.s2.sj0121.mynotebook.Note"></mapping>
     </list>
 </litepal>

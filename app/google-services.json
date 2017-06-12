@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "909973163963",
+    "firebase_url": "https://mynotebook-7ab07.firebaseio.com",
+    "project_id": "mynotebook-7ab07",
+    "storage_bucket": "mynotebook-7ab07.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909973163963:android:d1ef19a2d138b0fb",
+        "android_client_info": {
+          "package_name": "cn.studyjams.s2.sj0121.mynotebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909973163963-tgjsifhrgbq3khedkg51rvsm1764jq3t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cn.studyjams.s2.sj0121.mynotebook",
+            "certificate_hash": "c1f29550c2fd420e4475bc184e35eb8f1f9329bd"
+          }
+        },
+        {
+          "client_id": "909973163963-96k11hssd18mkkcjfussodfcs077dfo5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc288KfRRFMgVyg9RSOEdbN55Nk_8BFOE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909973163963-96k11hssd18mkkcjfussodfcs077dfo5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

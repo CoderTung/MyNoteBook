@@ -1,4 +1,4 @@
-package cn.studyjams.s2.sj20170121.mynotebook;
+package cn.studyjams.s2.sj0121.mynotebook;
 
 import org.litepal.LitePalApplication;
 
